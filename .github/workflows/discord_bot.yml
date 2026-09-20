@@ -1,0 +1,33 @@
+name: 24h Discord Webhook
+
+on:
+  schedule:
+    # 매일 한국 시간(KST) 낮 12시 00분에 자동으로 발송됩니다. (cron: '0 3 * * *')
+    - cron: '0 3 * * *'
+  workflow_dispatch:     # 수동 실행 설정
+    inputs:
+      custom_message:   # 수동 입력창
+        description: '수동으로 보낼 메시지를 입력하세요 (비워두면 자동 발송 문구가 나갑니다)'
+        required: false
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Webhook
+        run: |
+          # 수동 입력값 변수 지정
+          INPUT_MSG="${{ github.event.inputs.custom_message }}"
+          
+          # 수동 입력창에 아무것도 안 적었거나 자동(schedule) 실행일 때 나갈 문구 설정
+          if [ -z "$INPUT_MSG" ]; then
+            MSG="발로란트 최저가 대리서버 입니다. 와서 구경한번 하세요 \n @everyone \n https://discord.gg/XphRmaXnVK"
+          else
+            MSG="$INPUT_MSG"
+          fi
+          
+          # 디스코드 웹훅 전송
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{\"content\": \"$MSG\"}" \
+               "${{ secrets.DISCORD_WEBHOOK_URL }}"
