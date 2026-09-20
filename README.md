@@ -1,0 +1,1 @@
+# discord-auto24H-partner
