@@ -3,6 +3,7 @@ name: 24h Discord Webhook
 on:
   schedule:
     # 매일 한국 시간(KST) 낮 12시 00분
+    # UTC 03:00 = KST 12:00
     - cron: '0 3 * * *'
 
   workflow_dispatch:
@@ -29,35 +30,19 @@ jobs:
           fi
 
           # \n을 실제 줄바꿈으로 변환
-          MSG=$(printf '%b' "$MSG")
+          MESSAGE=$(printf '%b' "$MSG")
 
-          # JSON 안전하게 생성
-          python3 - "$MSG" "$WEBHOOK_URL" <<'PY'
-          import json
-          import sys
-          import urllib.request
-
-          message = sys.argv[1]
-          webhook_url = sys.argv[2]
-
-          data = {
-              "content": message,
-              "allowed_mentions": {
-                  "parse": ["everyone"]
+          # JSON 안전하게 생성 후 Discord 웹훅으로 전송
+          jq -n \
+            --arg content "$MESSAGE" \
+            '{
+              content: $content,
+              allowed_mentions: {
+                parse: ["everyone"]
               }
-          }
-
-          payload = json.dumps(data, ensure_ascii=False).encode("utf-8")
-
-          request = urllib.request.Request(
-              webhook_url,
-              data=payload,
-              headers={
-                  "Content-Type": "application/json"
-              },
-              method="POST"
-          )
-
-          with urllib.request.urlopen(request) as response:
-              print(f"Discord 응답 코드: {response.status}")
-PY
+            }' \
+          | curl \
+              -H "Content-Type: application/json" \
+              -X POST \
+              --data-binary @- \
+              "$WEBHOOK_URL"
