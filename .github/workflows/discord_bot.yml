@@ -21,6 +21,7 @@ jobs:
       - name: Send Webhook
         env:
           WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
           INPUT_MSG: ${{ github.event.inputs.custom_message }}
         run: |
           if [ -z "$INPUT_MSG" ]; then
