@@ -12,6 +12,7 @@ on:
           - 테스트 서버
           - 보조 서버
           - 발로 랜계no.1
+          - 니트로
 
       custom_message:
         description: '보낼 메시지를 입력하세요'
@@ -29,6 +30,7 @@ jobs:
           WEBHOOK_URL_2: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
           WEBHOOK_URL_3: ${{ secrets.DISCORD_WEBHOOK_URL_3 }}
           WEBHOOK_URL_4: ${{ secrets.DISCORD_WEBHOOK_URL_4 }}
+          WEBHOOK_URL_5: ${{ secrets.DISCORD_WEBHOOK_URL_5 }}
           SELECTED_SERVER: ${{ inputs.target_server }}
           INPUT_MSG: ${{ inputs.custom_message }}
 
@@ -41,6 +43,8 @@ jobs:
             WEBHOOK_URL="$WEBHOOK_URL_3"
           elif [ "$SELECTED_SERVER" = "발로 랜계no.1" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_4"
+          elif [ "$SELECTED_SERVER" = "니트로" ]; then
+            WEBHOOK_URL="$WEBHOOK_URL_5"
           else
             echo "Unknown target server: $SELECTED_SERVER"
             exit 1
