@@ -9,7 +9,7 @@ on:
         type: choice
         options:
           - 러브스댈구
-          - 테스트 서버
+          - 발로몰
           - 보조 서버
           - 발로 랜계no.1
           - 니트로
@@ -37,7 +37,7 @@ jobs:
         run: |
           if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_1"
-          elif [ "$SELECTED_SERVER" = "테스트 서버" ]; then
+          elif [ "$SELECTED_SERVER" = "발로몰" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_2"
           elif [ "$SELECTED_SERVER" = "보조 서버" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_3"
