@@ -32,6 +32,7 @@ jobs:
           WEBHOOK_URL_1: ${{ secrets.DISCORD_WEBHOOK_URL }}
           WEBHOOK_URL_2: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
           WEBHOOK_URL_3: ${{ secrets.DISCORD_WEBHOOK_URL_3 }}
+          WEBHOOK_URL_4: ${{ secrets.DISCORD_WEBHOOK_URL_4 }}
           SELECTED_SERVER: ${{ github.event.inputs.target_server }}
           INPUT_MSG: ${{ github.event.inputs.custom_message }}
         run: |
