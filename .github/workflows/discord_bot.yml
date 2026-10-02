@@ -8,7 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - 리자몽 서버
+          - 러브스댈구
           - 테스트 서버
           - 보조 서버
           - 발로 랜계no.1
@@ -35,7 +35,7 @@ jobs:
           INPUT_MSG: ${{ inputs.custom_message }}
 
         run: |
-          if [ "$SELECTED_SERVER" = "리자몽 서버" ]; then
+          if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_1"
           elif [ "$SELECTED_SERVER" = "테스트 서버" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_2"
