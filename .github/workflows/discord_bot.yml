@@ -16,6 +16,7 @@ on:
           - 리자몽 서버
           - 테스트 서버
           - 보조 서버
+          - 발로 랜계no.1
 
       custom_message:
         description: '수동으로 보낼 메시지를 입력하세요 (비워두면 자동 발송 문구가 나옵니다)'
@@ -44,6 +45,8 @@ jobs:
             WEBHOOK_URL="$WEBHOOK_URL_2"
           elif [ "$SELECTED_SERVER" = "보조 서버" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_3"
+          elif [ "$SELECTED_SERVER" = "랜계서버" ]; then
+            WEBHOOK_URL="$WEBHOOK_URL_4"
           else
             echo "Unknown target server: $SELECTED_SERVER"
             exit 1
