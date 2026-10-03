@@ -43,7 +43,7 @@ jobs:
             WEBHOOK_URL="$WEBHOOK_URL_3"
           elif [ "$SELECTED_SERVER" = "발로 랜계no.1" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_4"
-            elif [ "$SELECTED_SERVER" = "니트로" ]; then
+          elif [ "$SELECTED_SERVER" = "니트로" ]; then
             WEBHOOK_URL="$WEBHOOK_URL_5"
           else
             echo "Unknown target server: $SELECTED_SERVER"
