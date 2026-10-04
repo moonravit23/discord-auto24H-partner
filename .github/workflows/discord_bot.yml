@@ -41,14 +41,8 @@ jobs:
 
         run: |
           if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
-            MSG='🔥 최저가 보장! 발로란트 전문 리자몽몰입니다!
-🎮 가격 부담 없이 가장 저렴하게 티어 올리고 싶다면?
-💰 타샵 비교 불가! 업계 최저가 단가로 티어 수직 상승!
-⚡ 빠른 티켓 응대와 베테랑 기사진의 압도적인 승률 & 신속 작업
-🛡️ 100% 철저한 비밀 유지와 완벽한 안전 보장까지!
-지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!
-👉 https://discord.gg/ASrvjw4dNT
-||@everyone||'
+            MSG="🔥 최저가 보장! 발로란트 전문 리자몽몰입니다!\n🎮 가격 부담 없이 가장 저렴하게 티어 올리고 싶다면?\n💰 타샵 비교 불가! 업계 최저가 단가로 티어 수직 상승!\n⚡ 빠른 티켓 응대와 베테랑 기사진의 압도적인 승률 & 신속 작업\n🛡️ 100% 철저한 비밀 유지와 완벽한 안전 보장까지!\n지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!\n👉 https://discord.gg/ASrvjw4dNT\n||@everyone||"
+
             WEBHOOK_URLS=("$WEBHOOK_URL_1" "$WEBHOOK_URL_2" "$WEBHOOK_URL_3" "$WEBHOOK_URL_4" "$WEBHOOK_URL_5" "$WEBHOOK_URL_6")
           else
             if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
