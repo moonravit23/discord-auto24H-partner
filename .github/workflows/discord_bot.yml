@@ -34,6 +34,7 @@ jobs:
           WEBHOOK_URL_3: ${{ secrets.DISCORD_WEBHOOK_URL_3 }}
           WEBHOOK_URL_4: ${{ secrets.DISCORD_WEBHOOK_URL_4 }}
           WEBHOOK_URL_5: ${{ secrets.DISCORD_WEBHOOK_URL_5 }}
+          WEBHOOK_URL_6: ${{ secrets.DISCORD_WEBHOOK_URL_6 }}
           SELECTED_SERVER: ${{ inputs.target_server }}
           INPUT_MSG: ${{ inputs.custom_message }}
 
@@ -47,7 +48,7 @@ jobs:
 지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!
 👉 https://discord.gg/ASrvjw4dNT
 ||@everyone||'
-            WEBHOOK_URLS=("$WEBHOOK_URL_1" "$WEBHOOK_URL_2" "$WEBHOOK_URL_3" "$WEBHOOK_URL_4" "$WEBHOOK_URL_5")
+            WEBHOOK_URLS=("$WEBHOOK_URL_1" "$WEBHOOK_URL_2" "$WEBHOOK_URL_3" "$WEBHOOK_URL_4" "$WEBHOOK_URL_5" "$WEBHOOK_URL_6")
           else
             if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
               WEBHOOK_URL="$WEBHOOK_URL_1"
