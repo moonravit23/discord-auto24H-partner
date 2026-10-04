@@ -16,6 +16,7 @@ on:
           - 보조 서버
           - 발로 랜계no.1
           - 니트로
+          - 04디스코드
 
       custom_message:
         description: '보낼 메시지를 입력하세요'
@@ -60,6 +61,8 @@ jobs:
               WEBHOOK_URL="$WEBHOOK_URL_4"
             elif [ "$SELECTED_SERVER" = "니트로" ]; then
               WEBHOOK_URL="$WEBHOOK_URL_5"
+            elif [ "$SELECTED_SERVER" = "04디스코드" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_6"
             else
               echo "Unknown target server: $SELECTED_SERVER"
               exit 1
