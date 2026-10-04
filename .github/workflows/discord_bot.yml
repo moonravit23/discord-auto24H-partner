@@ -1,6 +1,9 @@
 name: Discord Webhook
 
 on:
+  schedule:
+    - cron: '0 3 * * *'
+
   workflow_dispatch:
     inputs:
       target_server:
@@ -35,46 +38,68 @@ jobs:
           INPUT_MSG: ${{ inputs.custom_message }}
 
         run: |
-          if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
-            WEBHOOK_URL="$WEBHOOK_URL_1"
-          elif [ "$SELECTED_SERVER" = "발로몰" ]; then
-            WEBHOOK_URL="$WEBHOOK_URL_2"
-          elif [ "$SELECTED_SERVER" = "보조 서버" ]; then
-            WEBHOOK_URL="$WEBHOOK_URL_3"
-          elif [ "$SELECTED_SERVER" = "발로 랜계no.1" ]; then
-            WEBHOOK_URL="$WEBHOOK_URL_4"
-          elif [ "$SELECTED_SERVER" = "니트로" ]; then
-            WEBHOOK_URL="$WEBHOOK_URL_5"
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+            MSG='🔥 최저가 보장! 발로란트 전문 리자몽몰입니다!
+🎮 가격 부담 없이 가장 저렴하게 티어 올리고 싶다면?
+💰 타샵 비교 불가! 업계 최저가 단가로 티어 수직 상승!
+⚡ 빠른 티켓 응대와 베테랑 기사진의 압도적인 승률 & 신속 작업
+🛡️ 100% 철저한 비밀 유지와 완벽한 안전 보장까지!
+지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!
+👉 https://discord.gg/ASrvjw4dNT
+||@everyone||'
+            WEBHOOK_URLS=("$WEBHOOK_URL_1" "$WEBHOOK_URL_2" "$WEBHOOK_URL_3" "$WEBHOOK_URL_4" "$WEBHOOK_URL_5")
           else
-            echo "Unknown target server: $SELECTED_SERVER"
-            exit 1
+            if [ "$SELECTED_SERVER" = "러브스댈구" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_1"
+            elif [ "$SELECTED_SERVER" = "발로몰" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_2"
+            elif [ "$SELECTED_SERVER" = "보조 서버" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_3"
+            elif [ "$SELECTED_SERVER" = "발로 랜계no.1" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_4"
+            elif [ "$SELECTED_SERVER" = "니트로" ]; then
+              WEBHOOK_URL="$WEBHOOK_URL_5"
+            else
+              echo "Unknown target server: $SELECTED_SERVER"
+              exit 1
+            fi
+            if [ -z "$INPUT_MSG" ]; then
+              MSG="테스트 메시지입니다.\nDiscord 웹훅 정상 작동 확인!"
+            else
+              MSG="$INPUT_MSG"
+            fi
+            WEBHOOK_URLS=("$WEBHOOK_URL")
           fi
-          if [ -z "$WEBHOOK_URL" ]; then
-            echo "WEBHOOK_URL is empty"
-            exit 1
-          fi
-          if [ -z "$INPUT_MSG" ]; then
-            MSG="테스트 메시지입니다.\nDiscord 웹훅 정상 작동 확인!"
-          else
-            MSG="$INPUT_MSG"
-          fi
+
           MESSAGE=$(printf '%b' "$MSG")
-          response=$(jq -n \
-            --arg content "$MESSAGE" \
-            '{
-              content: $content,
-              allowed_mentions: {
-                parse: ["everyone"]
-              }
-            }' \
-            | curl -s -o /tmp/resp.txt -w "%{http_code}" \
-                -H "Content-Type: application/json" \
-                -X POST \
-                --data-binary @- \
-                "$WEBHOOK_URL")
-          if [ "$response" != "204" ]; then
-            echo "Discord webhook failed with HTTP $response"
-            cat /tmp/resp.txt
+          failed=0
+          for WEBHOOK_URL in "${WEBHOOK_URLS[@]}"; do
+            if [ -z "$WEBHOOK_URL" ]; then
+              echo "A Discord webhook URL is empty"
+              failed=1
+              continue
+            fi
+            response=$(jq -n \
+              --arg content "$MESSAGE" \
+              '{
+                content: $content,
+                allowed_mentions: {
+                  parse: ["everyone"]
+                }
+              }' \
+              | curl -sS -o /tmp/resp.txt -w "%{http_code}" \
+                  -H "Content-Type: application/json" \
+                  -X POST \
+                  --data-binary @- \
+                  "$WEBHOOK_URL")
+            if [ "$response" != "204" ]; then
+              echo "Discord webhook failed with HTTP $response"
+              cat /tmp/resp.txt
+              failed=1
+            else
+              echo "Discord webhook sent successfully!"
+            fi
+          done
+          if [ "$failed" -ne 0 ]; then
             exit 1
           fi
-          echo "Discord webhook sent successfully!"
