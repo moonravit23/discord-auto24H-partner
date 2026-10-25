@@ -43,7 +43,7 @@ jobs:
           set -euo pipefail
 
           if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
-            MSG=$'🔥 최저가 보장! 발로란트 전문 리자몽몰입니다!! 🔥\n🎮 가격 부담 없이 가장 저렴하게 티어 올리고 싶다면?\n💰 타샵 비교 불가! 업계 최저가 단가로 티어 수직 상승!\n⚡ 빠른 티켓 응대와 베테랑 기사진의 압도적인 승률 & 신속 작업\n🛡️ 100% 철저한 비밀 유지와 완벽한 안전 보장까지!\n지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!\n👉 https://discord.gg/XphRmaXnVK\n\n@everyone'
+            MSG=$'⚡ XENIX CHEAT — 압도적인 퍼포먼스\n\n━━━━━━━━━━━━━━━━━━━━\n\n🚀 차원이 다른 성능, 압도적인 퍼포먼스\n💎 타협 없는 퀄리티와 안정성\n🔥 디테일 하나까지 놓치지 않는 완성도\n\n단순한 기능을 넘어, 성능과 퀄리티의 차이를 보여드립니다.\n끊임없는 개발과 개선을 통해 더 나은 경험을 추구합니다.\n\n성능으로 증명하고, 퀄리티로 차별화하다.\n\n👑 XENIX CHEAT\nBUILT FOR PERFORMANCE. DEFINED BY QUALITY.\nhttps://discord.gg/QeQyu99aPW\n@everyone'
             WEBHOOK_URLS=("$WEBHOOK_URL_1" "$WEBHOOK_URL_2" "$WEBHOOK_URL_3" "$WEBHOOK_URL_4" "$WEBHOOK_URL_5" "$WEBHOOK_URL_6")
           else
             case "${SELECTED_SERVER}" in
@@ -62,21 +62,33 @@ jobs:
             if [ -n "${INPUT_MSG:-}" ]; then
               MSG="${INPUT_MSG}"
             else
-              MSG=$'🔥 최저가 보장! 발로란트 전문 리자몽몰입니다!! 🔥\n🎮 가격 부담 없이 가장 저렴하게 티어 올리고 싶다면?\n💰 타샵 비교 불가! 업계 최저가 단가로 티어 수직 상승!\n⚡ 빠른 티켓 응대와 베테랑 기사진의 압도적인 승률 & 신속 작업\n🛡️ 100% 철저한 비밀 유지와 완벽한 안전 보장까지!\n지금 바로 리자몽몰 티켓 오픈하고 견적 문의하세요!\n👉 https://discord.gg/XphRmaXnVK\n\n@everyone'
+              MSG=$'⚡ XENIX CHEAT — 압도적인 퍼포먼스\n\n━━━━━━━━━━━━━━━━━━━━\n\n🚀 차원이 다른 성능, 압도적인 퍼포먼스\n💎 타협 없는 퀄리티와 안정성\n🔥 디테일 하나까지 놓치지 않는 완성도\n\n단순한 기능을 넘어, 성능과 퀄리티의 차이를 보여드립니다.\n끊임없는 개발과 개선을 통해 더 나은 경험을 추구합니다.\n\n성능으로 증명하고, 퀄리티로 차별화하다.\n\n👑 XENIX CHEAT\nBUILT FOR PERFORMANCE. DEFINED BY QUALITY.\nhttps://discord.gg/QeQyu99aPW\n@everyone'
             fi
 
             WEBHOOK_URLS=("$WEBHOOK_URL")
           fi
 
           failed=0
+          valid_urls=()
 
           for WEBHOOK_URL in "${WEBHOOK_URLS[@]}"; do
             if [ -z "$WEBHOOK_URL" ]; then
-              echo "A Discord webhook URL is empty"
-              failed=1
+              echo "Skipping empty webhook URL"
               continue
             fi
+            if [[ "$WEBHOOK_URL" != https://*discord.com/api/webhooks/* && "$WEBHOOK_URL" != https://*discordapp.com/api/webhooks/* ]]; then
+              echo "Skipping invalid webhook URL format"
+              continue
+            fi
+            valid_urls+=("$WEBHOOK_URL")
+          done
 
+          if [ ${#valid_urls[@]} -eq 0 ]; then
+            echo "No valid webhook URLs were found. Check GitHub Secrets."
+            exit 1
+          fi
+
+          for WEBHOOK_URL in "${valid_urls[@]}"; do
             MESSAGE=$(printf '%b' "$MSG")
             response=$(jq -n \
               --arg content "$MESSAGE" \
